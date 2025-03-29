@@ -19,3 +19,15 @@ func respondWithJSON(w http.ResponseWriter, statusCode int, payload any) {
 	w.WriteHeader(statusCode)
 	w.Write(data)
 }
+
+func respondWithError(w http.ResponseWriter, statusCode int, message string) {
+	if statusCode >= 500 {
+		log.Println("Server Error:", message)
+	}
+
+	type errorResponse struct {
+		Error string `json:"error"`
+	}
+
+	respondWithJSON(w, statusCode, errorResponse{Error: message})
+}
